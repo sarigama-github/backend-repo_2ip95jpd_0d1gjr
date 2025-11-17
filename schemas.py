@@ -11,8 +11,8 @@ Model name is converted to lowercase for the collection name:
 - BlogPost -> "blogs" collection
 """
 
-from pydantic import BaseModel, Field
-from typing import Optional
+from pydantic import BaseModel, Field, EmailStr
+from typing import Optional, List
 
 # Example schemas (replace with your own):
 
@@ -38,11 +38,18 @@ class Product(BaseModel):
     category: str = Field(..., description="Product category")
     in_stock: bool = Field(True, description="Whether product is in stock")
 
-# Add your own schemas here:
-# --------------------------------------------------
+# COG Website Schemas
 
-# Note: The Flames database viewer will automatically:
-# 1. Read these schemas from GET /schema endpoint
-# 2. Use them for document validation when creating/editing
-# 3. Handle all database operations (CRUD) directly
-# 4. You don't need to create any database endpoints!
+class Inquiry(BaseModel):
+    """
+    Contact inquiries from the website
+    Collection: "inquiry"
+    """
+    name: str = Field(..., description="Full name")
+    email: EmailStr = Field(..., description="Email address")
+    organization: Optional[str] = Field(None, description="Organization or agency")
+    phone: Optional[str] = Field(None, description="Phone number")
+    subject: Optional[str] = Field(None, description="Subject of inquiry")
+    message: str = Field(..., description="Message body")
+    interested_services: Optional[List[str]] = Field(default=None, description="Selected service interests")
+    source: Optional[str] = Field(None, description="Lead source / page")
